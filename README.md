@@ -7,15 +7,15 @@ A script to automate the process of loading drivers and scripts to a windows ins
 
 [Functions Overview](https://github.com/optimuspryne/Create_Custom_Windows_ISO/edit/main/README.md#functions-overview)
 
-* [Get-Started](https://github.com/optimuspryne/Create_Custom_Windows_ISO/edit/main/README.md#get-started)
-* [Copy-ISO](https://github.com/optimuspryne/Create_Custom_Windows_ISO/edit/main/README.md#copy-iso)
-* [Convert-ESD](https://github.com/optimuspryne/Create_Custom_Windows_ISO/edit/main/README.md#convert-esd)
-* [Add-Boot-Drivers](https://github.com/optimuspryne/Create_Custom_Windows_ISO/edit/main/README.md#add-boot-drivers)
-* [Add-WS-Drivers](https://github.com/optimuspryne/Create_Custom_Windows_ISO/edit/main/README.md#add-ws-drivers)
-* [Add-Files-And-Scripts](https://github.com/optimuspryne/Create_Custom_Windows_ISO/edit/main/README.md#add-files-and-scripts)
-* [Make-ISO](https://github.com/optimuspryne/Create_Custom_Windows_ISO/edit/main/README.md#make-iso)
-* [Version-Menu](https://github.com/optimuspryne/Create_Custom_Windows_ISO/edit/main/README.md#version-menu)
-* [YN-Menu](https://github.com/optimuspryne/Create_Custom_Windows_ISO/edit/main/README.md#yn-menu)
+* [Get-Started](https://github.com/optimuspryne/Create_Custom_Windows_ISO#get-started)
+* [Copy-ISO](https://github.com/optimuspryne/Create_Custom_Windows_ISO#copy-iso)
+* [Convert-ESD](https://github.com/optimuspryne/Create_Custom_Windows_ISO#convert-esd)
+* [Add-Boot-Drivers](https://github.com/optimuspryne/Create_Custom_Windows_ISO#add-boot-drivers)
+* [Add-WS-Drivers](https://github.com/optimuspryne/Create_Custom_Windows_ISO#add-ws-drivers)
+* [Add-Files-And-Scripts](https://github.com/optimuspryne/Create_Custom_Windows_ISO#add-files-and-scripts)
+* [Make-ISO](https://github.com/optimuspryne/Create_Custom_Windows_ISO#make-iso)
+* [Version-Menu](https://github.com/optimuspryne/Create_Custom_Windows_ISO#version-menu)
+* [YN-Menu](https://github.com/optimuspryne/Create_Custom_Windows_ISO#yn-menu)
 	
 
 #### General Overview
@@ -74,17 +74,17 @@ Step 3a: Then you're asked if you would like to 'just update scripts and files'.
 Step 3b: If you choose 'no' when asked if you want to 'just update scripts and files' then the script will proceed as if this is your first time running 
          through.
 
-Step 4: Calls the Copy-Iso function.  See [Copy-Iso](https://github.com/optimuspryne/Create_Custom_Windows_ISO/edit/main/README.md#copy-iso)
+Step 4: Calls the Copy-Iso function.  See [Copy-Iso](https://github.com/optimuspryne/Create_Custom_Windows_ISO#copy-iso)
 
-Step 5: Calls the Convert-ESD function.  See [Convert-ESD](https://github.com/optimuspryne/Create_Custom_Windows_ISO/edit/main/README.md#convert-esd)
+Step 5: Calls the Convert-ESD function.  See [Convert-ESD](https://github.com/optimuspryne/Create_Custom_Windows_ISO#convert-esd)
 
-Step 6: Calls the Add-Boot-Drivers function.  See [Add-Boot-Drivers](https://github.com/optimuspryne/Create_Custom_Windows_ISO/edit/main/README.md#add-boot-drivers)
+Step 6: Calls the Add-Boot-Drivers function.  See [Add-Boot-Drivers](https://github.com/optimuspryne/Create_Custom_Windows_ISO#add-boot-drivers)
 
-Step 7: Calls the Add-WS-Drivers function.  See [Add-WS-Drivers](https://github.com/optimuspryne/Create_Custom_Windows_ISO/edit/main/README.md#add-ws-drivers)
+Step 7: Calls the Add-WS-Drivers function.  See [Add-WS-Drivers](https://github.com/optimuspryne/Create_Custom_Windows_ISO#add-ws-drivers)
 
-Step 8: Calls the Add-Files-And-Scripts function.  See [Add-Files-And-Scripts](https://github.com/optimuspryne/Create_Custom_Windows_ISO/edit/main/README.md#add-files-and-scripts)
+Step 8: Calls the Add-Files-And-Scripts function.  See [Add-Files-And-Scripts](https://github.com/optimuspryne/Create_Custom_Windows_ISO#add-files-and-scripts)
 
-Step 9: Calls the Make-ISO function.  See [Make-ISO](https://github.com/optimuspryne/Create_Custom_Windows_ISO/edit/main/README.md#make-iso)
+Step 9: Calls the Make-ISO function.  See [Make-ISO](https://github.com/optimuspryne/Create_Custom_Windows_ISO#make-iso)
 
 
 
