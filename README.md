@@ -1,8 +1,9 @@
-# Create_Custom_Windows_ISO
-A script to automate the process of loading drivers and scripts to a windows install ISO
+# Auto_ISO
+
+A script to automate the process of loading drivers and scripts to a windows installation ISO
 
 -----
-#### Table of Contents
+# Table of Contents
 [General Overview](https://github.com/optimuspryne/Create_Custom_Windows_ISO/edit/main/README.md#general-overview)
 
 [Functions Overview](https://github.com/optimuspryne/Create_Custom_Windows_ISO/edit/main/README.md#functions-overview)
@@ -18,14 +19,12 @@ A script to automate the process of loading drivers and scripts to a windows ins
 * [YN-Menu](https://github.com/optimuspryne/Create_Custom_Windows_ISO#yn-menu)
 	
 
-#### General Overview
+# General Overview
 
 
-This script will allow you to create a custom Windows ISO.  It has the ability to load drivers into startup and into the main installation.  The script will copy your unattend.xml file to %WinDir%\Panther and it will also copy your custom scripts and files to %WinDir%\Setup\Scripts and %WinDir%\Setup\Files
+This script will allow you to create a custom Windows ISO.  It has the ability to load drivers into startup and into the main installation.  It will copy your unattend.xml file to %WinDir%\Panther and it will also copy your custom scripts and files to %WinDir%\Setup\Scripts and %WinDir%\Setup\Files
 
-The script performs all functions the following location on your computer: C:\WinWork.
-
-The first thing the script asks you is if you'd like it to make these folders for you. So if this is your first time running the script, just let it make the folders for you.  If you insist on making the folders yourself, the directory structure of C:\WinWork should be identical to the following:
+The script operates from the following location on your computer: C:\WinWork.  The thing the the script asks you is if you'd like it to make the necessary folders for you. So if this is your first time running the script, just let it make the folders for you.  If you insist on making the folders yourself, the directory structure of C:\WinWork should be identical to the following:
 
 C:\WinWork\
 
@@ -53,14 +52,14 @@ The only "required" file you need before starting the script is a fresh Windows 
 
 WindowsXX.iso ('XX' is your Windows version, i.e. 10 or 11.  The name is not case sensitive)
 
-Any ISO you wish to customize should be located in the root of the working directory: C:\WinWork\.  If you have any custom scripts or files (Your unattend.xml file has to be in C:\WinWork\Files)they should be copied to C:\WinWork\Scripts or C:\WinWork\Files.  Any driver files you need included in the windows setup should be copied to C:\WinWork\Drivers\Boot.  If you want to pack in any drivers to the main installation, copy those files to C:\WinWork\Drivers\WinXX ('XX' is the OS version).
+Any ISO you wish to customize should be located in the root of the working directory: C:\WinWork\.  If you have any custom scripts or files (Your unattend.xml file has to be in C:\WinWork\Files) they should be copied to C:\WinWork\Scripts or C:\WinWork\Files.  Any driver files you need included in windows setup should be copied to C:\WinWork\Drivers\Boot.  If you want to pack in any drivers to the main installation, copy those files to C:\WinWork\Drivers\WinXX ('XX' is the OS version).
 
   
 
-#### Functions Overview
+# Functions Overview
 
 
-#### Get-Started
+### Get-Started
 
 The 'main' function the the script.  There are 9 major steps:
 
@@ -88,32 +87,32 @@ Step 9: Calls the Make-ISO function.  See [Make-ISO](https://github.com/optimusp
 
 
 
-#### Copy-ISO
+### Copy-ISO
 
 This function is passed the $Version variable when called.  It uses this variable to mount the correct ISO, located at C:\WinWork.  The ISO is mounted with a drive letter of W:\.  Then the contents of the ISO are copied using xcopy to C:\WinWork\ISO\WinXX ('XX' is determined by $Version variable so that the contents are copied to the correct folder). Once the files are copied, the ISO is unmounted.
 
 
 
 
-#### Convert-ESD
+### Convert-ESD
 
 This function is passed the $Version variable when called.  It uses the variable to make sure it's operating in the correct directory.  The function exports the 'Windows X Pro' index (usually index:6 when checked using 'DISM /Get-WimInfo') from the encrypted install.esd file.  The index is exported as an install.wim file to C:\WinWork\ISO\WinXX\Sources\ ('XX' is determined by $Version so that the correct wim file is exported), and then the install.esd file is deleted, as it's no longer needed.
 
 
 
-#### Add-Boot-Drivers
+### Add-Boot-Drivers
 
 This function is passed the $Version variable when called.  It uses the variable to make sure it's operating in the correct directory.  This function mounts the Boot.wim (index:2) file located at C:\WinWork\ISO\WinXX\Sources\Boot.wim ('XX' is determined by $Version so that the correct wim file is mounted) to C:\WinWork\Mount.  Any driver files (.inf, etc.) that you've copied to C:\WinWork\Drivers\Boot will be added to the mounted wim file.  Then the Boot.wim file is unmounted.
 
 
 
-#### Add-WS-Drivers
+### Add-WS-Drivers
 
 This function is passed the $Version variable when called.  It uses the variable to make sure it's operating in the correct directory.  This function mounts the install.wim (index:1) file located at C:\WinWork\ISO\WinXX\Sources\Install.wim ('XX' is determined by $Version so that the correct wim file is mounted) to C:\WinWork\Mount.  Any driver files (.inf, etc.) that you've copied to C:\WinWork\Drivers\WinXX will be added to the mounted wim file.
 
 
 
-#### Add-Files-And-Scripts
+### Add-Files-And-Scripts
 
 This function is passed the $Version and $Mode variables when called.  $Version (10 or 11) is used to make sure it's operating in the correct directory and $Mode (0 or 1) is used to determine if the user is just updating scripts and files or if they're running the script in it's entirety.
 
@@ -130,19 +129,19 @@ This function is passed the $Version and $Mode variables when called.  $Version 
 
 
 
-#### Make-ISO
+### Make-ISO
 
 This function is passed the $Version variable when called.  It uses the variable to make sure names the new ISO appropriately.  First the directory is changed to C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\Oscdimg\ and then oscdimg.exe is called.  Oscdimg creates a new ISO from the contents of C:\WinWork\ISO\WinXX ('XX' is determined by $Version so that the correct directory is used) to C:\WinWork\ called WindowsXX_Custom.iso.  This is the end of the script.
 
 
 
-#### Version-Menu
+### Version-Menu
 
 This function creates a menu prompt for the user to ask which version of Windows the script is working with. The selection made here is added to a variable and passed to every almost every function in the script.
 
 
 
-#### YN-Menu
+### YN-Menu
 
 This function takes two strings as parameters and uses them in the creation of a Yes/No prompt for the user.  This function should work for any Yes/No question you might need.
 
