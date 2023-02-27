@@ -1,4 +1,4 @@
-﻿function Version-Menu {
+function Version-Menu {
     
     #Allows you to create a menu prompt for the users to ask which version of Windows the script is working with. The selection made here is used in every other function
 
@@ -6,8 +6,8 @@
     param([string]$Title,[string]$Question)
 
     #Creating the two menu objects and adding them to an array.
-    $win11 = New-Object System.Management.Automation.Host.ChoiceDescription '&1: Win11', 'Answer: Win11'
-    $win10 = New-Object System.Management.Automation.Host.ChoiceDescription '&2: Win10', 'Answer: Win10'
+    $win11 = New-Object System.Management.Automation.Host.ChoiceDescription '&1  Win11', 'Answer: Win11'
+    $win10 = New-Object System.Management.Automation.Host.ChoiceDescription '&2  Win10', 'Answer: Win10'
     $options = [System.Management.Automation.Host.ChoiceDescription[]]($win11, $win10)
 
     #Building the user prompt object using the two Parameters and the $options array.
@@ -40,6 +40,69 @@ function YN-Menu {
         0 {"Yes"; Break}
         1 {"No"; Break}
     }
+}
+
+function Function-Menu {
+
+    #Allows you to create a menu prompt for the users to ask which version of Windows the script is working with. The selection made here is used in every other function
+
+    #Takes two strings a parameter to build the menu
+    param([string]$Title,[string]$Question)
+
+    #Creating the two menu objects and adding them to an array.
+    $justScripts = New-Object System.Management.Automation.Host.ChoiceDescription '&1  Just Update Scripts', 'Answer: justScripts'
+    $everything = New-Object System.Management.Automation.Host.ChoiceDescription '&2 Run Everything', 'Answer: everything'
+    $copyISO = New-Object System.Management.Automation.Host.ChoiceDescription '&3  Copy Base ISO', 'Answer: copyISO'
+    $convertESD = New-Object System.Management.Automation.Host.ChoiceDescription '&4  Convert .esd to .wim', 'Answer: convertESD'
+    $bootDrivers = New-Object System.Management.Automation.Host.ChoiceDescription '&5  Add Boot Drivers', 'Answer: bootDrivers'
+    $wsDrivers = New-Object System.Management.Automation.Host.ChoiceDescription '&6  Add Other Drivers', 'Answer: wsDrivers'
+    $makeISO = New-Object System.Management.Automation.Host.ChoiceDescription '&7  Make Custom ISO', 'Answer: makeISO'
+    $options = [System.Management.Automation.Host.ChoiceDescription[]]($justScripts, $everything, $copyISO, $convertESD, $bootDrivers, $wsDrivers, $makeISO)
+
+    #Building the user prompt object using the two Parameters and the $options array.
+    $choice = $host.ui.PromptForChoice($Title, $Question, $options, 0)
+
+    #Windows11 is the Default option.
+    switch ($choice) {
+        0 {"justScripts"; Break}
+        1 {"everything"; Break}
+        2 {"copyISO"; Break}
+        3 {"convertESD"; Break}
+        4 {"bootDrivers"; Break}
+        5 {"wsDrivers"; Break}
+        6 {"makeISO"; Break}
+    }
+
+}
+
+function Function-Selection {
+
+    param ($MenuSelection, $Version)
+
+    if ($MenuSelection -eq "justScripts"){
+        Mount-WindowsImage -Path C:\WinWork\Mount\ -ImagePath "C:\WinWork\ISO\Win$($Version)\Sources\Install.wim" -Index 1
+        Add-Files-And-Scripts -Version $Version
+        Make-ISO -Version $Version
+    }elseif ($MenuSelection -eq "copyISO"){
+        Copy-ISO -Version $Version
+    }elseif ($MenuSelection -eq "convertESD"){
+        Convert-ESD -Version $Version
+    }elseif ($MenuSelection -eq "bootDrivers"){
+        Add-Boot-Drivers -Version $Version
+    }elseif ($MenuSelection -eq "wsDrivers"){
+        Add-WS-Drivers -Version $Version
+        Dismount-WindowsImage -Path C:\WinWork\Mount\ –Save
+    }elseif ($MenuSelection -eq "makeISO"){
+        Make-ISO -Version $Version
+    }else{
+        Copy-ISO -Version $Version
+        Convert-ESD -Version $Version
+        Add-Boot-Drivers -Version $Version
+        Add-WS-Drivers -Version $Version
+        Add-Files-And-Scripts -Version $Version
+        Make-ISO -Version $Version
+    }
+
 }
 
 function Make-Directories {
@@ -119,13 +182,9 @@ function Add-Files-And-Scripts {
     $Mode = 0 assumes you've already run through the script once so it will mount install.wim and then copies/overwrites the files and scripts.  Useful for updating scripts.
     $Mode = 1 assumes this is your first time running the script.  This means install.wim is already mounted. It creates the "Panther" folder and then copies the files and scripts.#>
 
-    param ($Version, $Mode)
-
-    if ($Mode -eq 0) {
-        Mount-WindowsImage -Path C:\WinWork\Mount\ -ImagePath "C:\WinWork\ISO\Win$($Version)\Sources\Install.wim" -Index 1
-    }else {
-        New-Item -Path C:\WinWork\Mount\Windows\Panther -ItemType Directory
-    }
+    param ($Version)
+        
+    New-Item -Path C:\WinWork\Mount\Windows\Panther -ItemType Directory
 
     Copy-Item -Path "C:\WinWork\Scripts\" -Destination "C:\WinWork\Mount\Windows\Setup\Scripts" -Recurse
     Copy-Item -Path "C:\WinWork\Files\" -Destination "C:\WinWork\Mount\Windows\Setup\Files" -Recurse
@@ -144,9 +203,11 @@ function Make-ISO {
     #Takes paramter containing either 10 or 11 to denote Windows version.
     param ($Version)
 
+    $currentDate = Get-Date -Format MM-dd-yyyy
+
     #Creates bootable ISO from the files located in C:\WinWork\ISO\WinXX.
     CD "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\Oscdimg\"
-    ./oscdimg.exe -h -m -o -u2 -udfver102 -bootdata:2#p0,e,bC:\WinWork\ISO\Win$Version\boot\etfsboot.com#pEF,e,bC:\WinWork\ISO\Win$Version\efi\microsoft\boot\efisys.bin -lWin11 "C:\WinWork\ISO\Win$($Version)" "C:\WinWork\Windows$($Version)_Custom.iso"
+    ./oscdimg.exe -h -m -o -u2 -udfver102 -bootdata:2#p0,e,bC:\WinWork\ISO\Win$Version\boot\etfsboot.com#pEF,e,bC:\WinWork\ISO\Win$Version\efi\microsoft\boot\efisys.bin -lWin11 "C:\WinWork\ISO\Win$($Version)" "C:\WinWork\Windows$($Version)_$($currentDate).iso"
 }
 
 function Get-Started {
@@ -170,23 +231,22 @@ function Get-Started {
     #Calling Version-Menu function to acquire Windows version that ISO needs to be created for.  $WinVer will contain either 10 or 11 and be used in every function call.
     $winVer = Version-Menu -Title "Please Answer." -Question "Which Windows version you making an ISO for?"
     
-    #Using YN-Menu to figure out if user needs to make a ISO from scratch or just update the scripts and files of an existing one.
-    $modePrompt = YN-Menu -Title "Please Confirm" -Question "Do you just need to update the Scripts and Files?"
 
-    #If user is just updating scripts, $mode will be set to 0 and then Add-Files-Scripts will be called using Mode 0.  If user is starting from scratch then the whole script will be run.
-    if ($modePrompt -eq "Yes"){
-        $mode = 0
-        Add-Files-And-Scripts -Version $winVer -Mode $mode
-        Make-ISO -Version $winVer
-    }else{
-        $mode = 1
-        Copy-ISO -Version $winVer
-        Convert-ESD -Version $winVer
-        Add-Boot-Drivers -Version $winVer
-        Add-WS-Drivers -Version $winVer
-        Add-Files-And-Scripts -Version $winVer -Mode $mode
-        Make-ISO -Version $winVer
-    }
+    #Using Function-Menu to figure what the user needs to script to do.  'Everything' option will run the entire script in order.
+    $whichFunction = Function-Menu -Title "Please Confirm" -Question "What do you need this script to do?"
+
+    Function-Selection -MenuSelection $whichFunction -Version $winVer
+
+    do {
+
+    $end = YN-Menu -Title "Please Confirm" -Question "Do you need the script to peform any other functions?"
+
+        if ($end -eq 'Yes'){
+            $whichFunction = Function-Menu -Title "Please Confirm" -Question "What do you need this script to do?"
+            Function-Selection -MenuSelection $whichFunction -Version $winVer
+        }
+
+    }until($end -eq 'No')
 }
 
 Get-Started
