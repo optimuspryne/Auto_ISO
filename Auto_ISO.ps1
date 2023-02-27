@@ -207,7 +207,7 @@ function Make-ISO {
 
     #Creates bootable ISO from the files located in C:\WinWork\ISO\WinXX.
     CD "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\Oscdimg\"
-    ./oscdimg.exe -h -m -o -u2 -udfver102 -bootdata:2#p0,e,bC:\WinWork\ISO\Win$Version\boot\etfsboot.com#pEF,e,bC:\WinWork\ISO\Win$Version\efi\microsoft\boot\efisys.bin -lWin11 "C:\WinWork\ISO\Win$($Version)" "C:\WinWork\Windows$($Version)_$($currentDate).iso"
+    ./oscdimg.exe -h -m -o -u2 -udfver102 -bootdata:2#p0,e,bC:\WinWork\ISO\Win$Version\boot\etfsboot.com#pEF,e,bC:\WinWork\ISO\Win$Version\efi\microsoft\boot\efisys.bin -lWin11 "C:\WinWork\ISO\Win$($Version)" "C:\WinWork\Windows $($Version) $($currentDate).iso"
 }
 
 function Get-Started {
