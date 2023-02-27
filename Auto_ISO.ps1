@@ -43,6 +43,8 @@ function YN-Menu {
 }
 
 function Make-Directories {
+
+        #Creates the directories necessary for this script to operate.
         Write-Host "Making Directories..."
         New-Item -Path C:\WinWork\ISO\Win10 -ItemType Directory
         New-Item -Path C:\WinWork\ISO\Win11 -ItemType Directory
