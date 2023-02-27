@@ -183,18 +183,26 @@ function Add-Files-And-Scripts {
     $Mode = 1 assumes this is your first time running the script.  This means install.wim is already mounted. It creates the "Panther" folder and then copies the files and scripts.#>
 
     param ($Version)
+
+    if (Test-Path -Path "C:\WinWork\Mount\Windows\Panther") {
+        Copy-Item -Path "C:\WinWork\Files\unattend.xml" -Destination "C:\WinWork\Mount\Windows\Panther\"
+    }else {
+        New-Item -Path C:\WinWork\Mount\Windows\Panther -ItemType Directory
+        Copy-Item -Path "C:\WinWork\Files\unattend.xml" -Destination "C:\WinWork\Mount\Windows\Panther\"
+    }
         
-    New-Item -Path C:\WinWork\Mount\Windows\Panther -ItemType Directory
+    if (Test-Path -Path "C:\WinWork\Mount\Windows\Setup\Scripts") {
+        Copy-Item -Path "C:\WinWork\Scripts\*" -Destination "C:\WinWork\Mount\Windows\Setup\Scripts" -Recurse
+    }else {
+        Copy-Item -Path "C:\WinWork\Scripts\" -Destination "C:\WinWork\Mount\Windows\Setup\Scripts" -Recurse
+    }
 
-    Copy-Item -Path "C:\WinWork\Scripts\" -Destination "C:\WinWork\Mount\Windows\Setup\Scripts" -Recurse
-    Copy-Item -Path "C:\WinWork\Files\" -Destination "C:\WinWork\Mount\Windows\Setup\Files" -Recurse
-
-    #Copies the unattend.xml file to \Windows\Panther\ so that the install will detect it and use it.
-    Copy-Item -Path "C:\WinWork\Files\unattend.xml" -Destination "C:\WinWork\Mount\Windows\Panther\"
-
-    #This is a file specific to my use case, can be commented out if not needed.
-    Copy-Item -Path "C:\WinWork\Files\Workstation Setup.lnk" -Destination "C:\WinWork\Mount\Users\Public\Desktop\"
-
+    if (Test-Path -Path "C:\WinWork\Mount\Windows\Setup\Files") {
+        Copy-Item -Path "C:\WinWork\Files\*" -Destination "C:\WinWork\Mount\Windows\Setup\Files" -Recurse
+    }else {
+        Copy-Item -Path "C:\WinWork\Files\" -Destination "C:\WinWork\Mount\Windows\Setup\Files" -Recurse
+    }
+    
     Dismount-WindowsImage -Path C:\WinWork\Mount\ -Save
 }
 
