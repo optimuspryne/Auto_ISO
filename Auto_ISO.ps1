@@ -42,6 +42,18 @@ function YN-Menu {
     }
 }
 
+function Make-Directories {
+        Write-Host "Making Directories..."
+        New-Item -Path C:\WinWork\ISO\Win10 -ItemType Directory
+        New-Item -Path C:\WinWork\ISO\Win11 -ItemType Directory
+        New-Item -Path C:\WinWork\Drivers\Win10 -ItemType Directory
+        New-Item -Path C:\WinWork\Drivers\Win11 -ItemType Directory
+        New-Item -Path C:\WinWork\Drivers\Boot -ItemType Directory
+        New-Item -Path C:\WinWork\Mount -ItemType Directory
+        New-Item -Path C:\WinWork\Scripts -ItemType Directory
+        New-Item -Path C:\WinWork\Files -ItemType Directory
+}
+
 function Copy-ISO {
     
     #Takes paramter containing either 10 or 11 to denote Windows version.
@@ -144,15 +156,7 @@ function Get-Started {
 
     #If user chooses yes, then the following directories will be created in C:\
     if ($directoryPrompt -eq "Yes") {
-        Write-Host "Making Directories..."
-        New-Item -Path C:\WinWork\ISO\Win10 -ItemType Directory
-        New-Item -Path C:\WinWork\ISO\Win11 -ItemType Directory
-        New-Item -Path C:\WinWork\Drivers\Win10 -ItemType Directory
-        New-Item -Path C:\WinWork\Drivers\Win11 -ItemType Directory
-        New-Item -Path C:\WinWork\Drivers\Boot -ItemType Directory
-        New-Item -Path C:\WinWork\Mount -ItemType Directory
-        New-Item -Path C:\WinWork\Scripts -ItemType Directory
-        New-Item -Path C:\WinWork\Files -ItemType Directory
+       Make-Directories
     }
     
     Write-Host "At this point, your ISO files should be located at C:\WinWork. Make sure they are renamed Windows10.iso or Windows11.iso`n
@@ -161,7 +165,7 @@ function Get-Started {
     If you haven't already copied the required files do so now and press enter when you're ready`n"
     Read-Host “Press ENTER to continue...”
 
-    #Calling Version-Menu function to acquire Windows version that ISO needs to be created for.  $WinVer will containg either 10 or 11 and be used in every function call.
+    #Calling Version-Menu function to acquire Windows version that ISO needs to be created for.  $WinVer will contain either 10 or 11 and be used in every function call.
     $winVer = Version-Menu -Title "Please Answer." -Question "Which Windows version you making an ISO for?"
     
     #Using YN-Menu to figure out if user needs to make a ISO from scratch or just update the scripts and files of an existing one.
