@@ -44,7 +44,7 @@ function YN-Menu {
 
 function Function-Menu {
 
-    #Allows you to create a menu prompt for the users to ask which version of Windows the script is working with. The selection made here is used in every other function
+   #Allows you to create a menu prompt for the users to ask which version of Windows the script is working with. The selection made here is used in every other function
 
     #Takes two strings a parameter to build the menu
     param([string]$Title,[string]$Question)
@@ -57,7 +57,8 @@ function Function-Menu {
     $bootDrivers = New-Object System.Management.Automation.Host.ChoiceDescription '&5  Add Boot Drivers', 'Answer: bootDrivers'
     $wsDrivers = New-Object System.Management.Automation.Host.ChoiceDescription '&6  Add Other Drivers', 'Answer: wsDrivers'
     $makeISO = New-Object System.Management.Automation.Host.ChoiceDescription '&7  Make Custom ISO', 'Answer: makeISO'
-    $options = [System.Management.Automation.Host.ChoiceDescription[]]($justScripts, $everything, $copyISO, $convertESD, $bootDrivers, $wsDrivers, $makeISO)
+    $updates = New-Object System.Management.Automation.Host.ChoiceDescription '&7  Install Updates', 'Answer: updates'
+    $options = [System.Management.Automation.Host.ChoiceDescription[]]($justScripts, $everything, $copyISO, $convertESD, $bootDrivers, $wsDrivers, $updates, $makeISO)
 
     #Building the user prompt object using the two Parameters and the $options array.
     $choice = $host.ui.PromptForChoice($Title, $Question, $options, 0)
@@ -70,8 +71,10 @@ function Function-Menu {
         3 {"convertESD"; Break}
         4 {"bootDrivers"; Break}
         5 {"wsDrivers"; Break}
-        6 {"makeISO"; Break}
+        6 {"updates"; Break}
+        7 {"makeISO"; Break}
     }
+
 
 }
 
@@ -123,6 +126,8 @@ function Copy-ISO {
     
     #Takes paramter containing either 10 or 11 to denote Windows version.
     param ($Version)
+
+    Remove-Item C:\WinWork\ISO\Win$Version\* -Recurse -Force
 
     # ISO image - replace with path to ISO to be mounted
     $isoImg = "C:\WinWork\Windows$($Version).iso"
@@ -187,18 +192,18 @@ function Add-Files-And-Scripts {
     if (Test-Path -Path "C:\WinWork\Mount\Windows\Panther") {
         Copy-Item -Path "C:\WinWork\Files\unattend.xml" -Destination "C:\WinWork\Mount\Windows\Panther\"
     }else {
-        New-Item -Path C:\WinWork\Mount\Windows\Panther -ItemType Directory
+        New-Item -Path "C:\WinWork\Mount\Windows\Panther" -ItemType Directory
         Copy-Item -Path "C:\WinWork\Files\unattend.xml" -Destination "C:\WinWork\Mount\Windows\Panther\"
     }
         
     if (Test-Path -Path "C:\WinWork\Mount\Windows\Setup\Scripts") {
-        Copy-Item -Path "C:\WinWork\Scripts\*" -Destination "C:\WinWork\Mount\Windows\Setup\Scripts" -Recurse
+        Copy-Item -Path "C:\WinWork\Scripts\*" -Destination "C:\WinWork\Mount\Windows\Setup\Scripts\" -Recurse
     }else {
         Copy-Item -Path "C:\WinWork\Scripts\" -Destination "C:\WinWork\Mount\Windows\Setup\Scripts" -Recurse
     }
 
     if (Test-Path -Path "C:\WinWork\Mount\Windows\Setup\Files") {
-        Copy-Item -Path "C:\WinWork\Files\*" -Destination "C:\WinWork\Mount\Windows\Setup\Files" -Recurse
+        Copy-Item -Path "C:\WinWork\Files\*" -Destination "C:\WinWork\Mount\Windows\Setup\Files\" -Recurse
     }else {
         Copy-Item -Path "C:\WinWork\Files\" -Destination "C:\WinWork\Mount\Windows\Setup\Files" -Recurse
     }
